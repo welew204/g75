@@ -1,0 +1,11 @@
+.grid-element {
+    background-color: white;
+}
+
+.grid-element:hover {
+    background-color: blue;
+}
+
+.grid-element--CA {
+    background-color: lightblue;
+}
