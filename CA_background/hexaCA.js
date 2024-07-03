@@ -4,13 +4,12 @@ const ctx = canvas.getContext("2d");
 console.log(ctx);
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-
-function draw() {}
+const sq_dimension = 25;
 
 let grid = [];
 //console.log(grid);
 
-function initGrid(mouse_pos, sq_dimension = 25) {
+function initGrid(mouse_pos) {
   let grid_width = Math.floor(canvas.width / sq_dimension);
   let grid_height = Math.floor(canvas.height / sq_dimension);
   let mouse_grid_x = Math.floor(mouse_pos[0] / sq_dimension);
@@ -122,7 +121,7 @@ function getSquareNeighbors(x, y) {
       x + x_delta >= 0 &&
       x + x_delta < grid.at(0).length
     ) {
-      neighbors[n] = [x + x_delta, y + y_delta];
+      neighbors[n] = [y + y_delta, x + x_delta];
     }
   }
   return neighbors;
@@ -139,10 +138,53 @@ function updateGrid() {
   */
   let to_a = [];
   let to_d = [];
+  let neighbors = [];
   for (let i of grid.keys()) {
     for (let j of grid.at(i).keys()) {
       if (grid.at(i).at(j) === "origin") {
         neighbors = getSquareNeighbors(j, i);
+        to_a = [...to_a, ...neighbors];
+      } else if (grid.at(i).at(j) === "a") {
+        neighbors = getSquareNeighbors(j, i);
+        to_a = [...to_a, ...neighbors];
+        to_d.push([i, j]);
+      }
+    }
+  }
+  const a_to_add = new Set(to_a);
+  const d_to_add = new Set(to_d);
+  console.log(a_to_add);
+  console.log(d_to_add);
+  console.log(grid);
+  for (let a of a_to_add.keys()) {
+    if (!a) continue;
+    let [i, j] = a;
+    //console.log("vals of i, j:", [i, j]);
+    grid[i][j] = "a";
+  }
+  for (let d of d_to_add.keys()) {
+    if (!d) continue;
+    [i, j] = d;
+    grid[i][j] = "d";
+  }
+  for (let i of grid.keys()) {
+    for (let j of grid.at(i).keys()) {
+      if (grid.at(i).at(j) === "a") {
+        ctx.fillStyle = "green";
+        ctx.fillRect(
+          j * sq_dimension,
+          i * sq_dimension,
+          sq_dimension,
+          sq_dimension
+        );
+      } else if (grid.at(i).at(j) === "d") {
+        ctx.fillStyle = "gray";
+        ctx.fillRect(
+          j * sq_dimension,
+          i * sq_dimension,
+          sq_dimension,
+          sq_dimension
+        );
       }
     }
   }
