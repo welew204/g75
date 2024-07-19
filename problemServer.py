@@ -1,4 +1,4 @@
-from collections import defaultdict
+from collections import defaultdict, deque
 import datetime as dt
 import random
 import pickle
@@ -111,6 +111,10 @@ class ProblemSet:
     def dateConverter(self, dateString):
         dtObject = dt.datetime.strptime(dateString, "%m-%d-%y")
         return dtObject
+
+    def convertToDateString(self, dtObject):
+        dateString = dtObject.strftime("%m-%d-%y")
+        return dateString
     
     def completeProblem(self, problem, timeTaken, dateCompleted=None, solutionChecked=False):
         """
@@ -240,6 +244,30 @@ class ProblemSet:
                 fastest = min(times)
                 res.append((problem, self.timeFormatter(fastest)))
         return res
+    
+    def leastRecentProblem(self, numOfProblems=1, removeEzProblems=True):
+        self.deserialize()
+        res = []
+        for problem, completionData in self.completionCalendar.items():
+            cDates = sorted(completionData.keys(), reverse=True) # Sort the dates in reverse order, latest date first
+            res.append((problem, completionData[cDates[0]], cDates[0]))
+        res.sort(key=lambda x: x[2])
+        if removeEzProblems:
+            to_remove = []
+            for i, r in enumerate(res):
+                for completion in  r[1]:
+                    if completion[0] < 90: # taking out any problems that took less than 90sec
+                        to_remove.append(i)
+            to_remove.sort(reverse=True)
+            for t in to_remove:
+                res.pop(t)
+        final = []
+        for r in res:
+            [completion] = r[1]
+            sec, usedSolution = completion
+            newR = (r[0], self.timeFormatter(sec), self.convertToDateString(r[2]))
+            final.append(newR)
+        return final[:numOfProblems] if len(final) >= numOfProblems else final
     
     def avgTimes(self, problems=[]):
         """
@@ -539,13 +567,29 @@ if __name__ == "__main__":
     ps.completeProblem(621, "3:21", "07-02-24")
     ps.completeProblem(17, "2:24", "07-02-24")
     ps.completeProblem(542, "8:10", "07-02-24")
+    ps.completeProblem(133, "6:01", "07-16-24")
+    ps.completeProblem(310, "5:15", "07-16-24")
+    ps.completeProblem(57, "2:33", "07-16-24")
+    ps.completeProblem(105, "3:45", "07-16-24")
+    ps.completeProblem(102, "8:22", "07-16-24")
+    ps.completeProblem(11, "4:45", "07-17-24")
+    ps.completeProblem(79, "4:30", "07-17-24")
+    ps.completeProblem(150, "10:15", "07-18-24")
+    ps.completeProblem(133, "2:50", "07-18-24")
+    ps.completeProblem(542, "7:40", "07-18-24")
+    ps.completeProblem(102, "3:44", "07-18-24")
+    ps.completeProblem(17, "3:08", "07-19-24")
+    ps.completeProblem(105, "2:15", "07-19-24")
+    ps.completeProblem(15, "2:56", "07-19-24")
+    ps.completeProblem(322, "2:45", "07-19-24")
 
 
     #print(ps)
     # some kind of deeper assessment
     # each day gen the problem list, then add results to the completionCalendar
-    print(ps.genProblemList(numProblems=7, include=[133, 102], exclude=[1, 53]))
+    #print(ps.genProblemList(numProblems=7, include=[133, 102], exclude=[1, 53]))
     #print(ps.hardestProblems(numProblems=5))
+    print(ps.leastRecentProblem())
     #print(ps.bestTimes())
     #print(ps.avgTimes())
     #pprint.pprint(ps.dailyAverageOverSpan("05-01-24", "06-06-24"))
