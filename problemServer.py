@@ -53,7 +53,7 @@ class ProblemSet:
             res["Number of Completions"] = len(res.keys())
             prettyProblems[problem] = res
         print("Completion Calendar: ")
-        pprint.pprint(prettyProblems)
+        #pprint.pprint(prettyProblems)
         return "\n"
 
     def ddNester(self):
@@ -161,11 +161,13 @@ class ProblemSet:
         randProblems = [x for x in self.problems if x not in exclude]
         random.shuffle(randProblems)
         remains = []
-        if include:
-            for problem in include:
-                res.append(problem)
-                count -= 1
-                randProblems.remove(problem)
+        while include:
+            problem = include.pop()
+            res.append(problem)
+            count -= 1
+            randProblems.remove(problem)
+            if count == 0:
+                return res
         for problem in randProblems:
             completedDates = sorted([x for x in self.completionCalendar[problem].keys()])
             # grabbing the completion with the smallest time for a given day (in the case of their being multiple on a day)
@@ -582,14 +584,62 @@ if __name__ == "__main__":
     ps.completeProblem(105, "2:15", "07-19-24")
     ps.completeProblem(15, "2:56", "07-19-24")
     ps.completeProblem(322, "2:45", "07-19-24")
+    ps.completeProblem(79, "4:40", "07-22-24")
+    ps.completeProblem(133, "2:13", "07-22-24")
+    ps.completeProblem(102, "6:40", "07-22-24")
+    ps.completeProblem(3, "10:15", "07-22-24")
+    ps.completeProblem(53, "0:52", "07-22-24")
+    ps.completeProblem(57, "2:50", "07-24-24")
+    ps.completeProblem(310, "4:20", "07-24-24")
+    ps.completeProblem(133, "1:42", "07-24-24")
+    ps.completeProblem(102, "2:16", "07-24-24")
+    ps.completeProblem(150, "7:00", "07-24-24")
+    ps.completeProblem(15, "2:49", "07-25-24")
+    ps.completeProblem(973, "5:05", "07-25-24")
+    ps.completeProblem(621, "6:14", "07-25-24")
+    ps.completeProblem(207, "15:00", "07-26-24", True)
+    ps.completeProblem(207, "3:05", "07-26-24")
+    ps.completeProblem(207, "5:58", "07-26-24")
+    ps.completeProblem(102, "2:23", "07-29-24")
+    ps.completeProblem(542, "7:40", "07-29-24")
+    ps.completeProblem(207, "7:30", "07-29-24")
+    ps.completeProblem(207, "7:45", "07-30-24")
+    ps.completeProblem(542, "6:25", "07-30-24")
+    ps.completeProblem(15, "1:59", "07-30-24")
+    ps.completeProblem(133, "3:37", "07-31-24")
+    ps.completeProblem(207, "4:43", "07-31-24")
+    ps.completeProblem(973, "1:40", "07-31-24")
+    ps.completeProblem(102, "2:03", "08-01-24")
+    ps.completeProblem(3, "5:45", "08-01-24")
+    ps.completeProblem(207, "2:57", "08-01-24")
+    ps.completeProblem(150, "5:15", "08-02-24")
+    ps.completeProblem(207, "3:06", "08-02-24")
+    ps.completeProblem(79, "12:25", "08-02-24")
+    ps.completeProblem(208, "35:00", "08-04-24", True)
+    ps.completeProblem(208, "4:10", "08-04-24")
+    ps.completeProblem(208, "4:02", "08-05-24")
+    ps.completeProblem(15, "2:20", "08-05-24")
+    ps.completeProblem(207, "3:42", "08-05-24")
+    ps.completeProblem(133, "5:03", "08-05-24")
+    ps.completeProblem(322, "12:01", "08-05-24")
+    ps.completeProblem(11, "5:15", "08-06-24")
+    ps.completeProblem(105, "3:25", "08-06-24")
+    ps.completeProblem(17, "2:49", "08-06-24")
+    ps.completeProblem(3, "3:32", "08-07-24")
+    ps.completeProblem(57, "4:27", "08-07-24")
+    ps.completeProblem(208, "3:01", "08-07-24")
+    ps.completeProblem(310, "3:30", "08-07-24")
+    ps.completeProblem(207, "4:20", "08-07-24")
+    # tomorrow do a newbie!
+    ps.completeProblem(238, "25:00", "08-09-24")
 
 
     #print(ps)
     # some kind of deeper assessment
     # each day gen the problem list, then add results to the completionCalendar
-    #print(ps.genProblemList(numProblems=7, include=[133, 102], exclude=[1, 53]))
+    print(ps.genProblemList(numProblems=5, include=[207, 238], exclude=[1, 53]))
     #print(ps.hardestProblems(numProblems=5))
-    print(ps.leastRecentProblem())
+    #print(ps.leastRecentProblem())
     #print(ps.bestTimes())
     #print(ps.avgTimes())
     #pprint.pprint(ps.dailyAverageOverSpan("05-01-24", "06-06-24"))
