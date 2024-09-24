@@ -11,7 +11,8 @@ initDate = dt.date(2024,9,3)
 term = 60 # months
 loanPrincipal = 50000
 annualInterestRate = 4.25
-monthlyPaymentAmount = 400
+monthlyPaymentAmount = 450
+nameOfSchedule = "450perMonth"
 amortizationDirectoryPath = "/Users/williamhbelew/Desktop/amortizationSchedules/"
 
 class Payment:
@@ -75,4 +76,4 @@ paymentSchedule = createAmortizationSchedule(
         monthlyPaymentAmount
         )
 pprint(paymentSchedule)
-saveScheduleToCsv(paymentSchedule, "1000perMonth")
+saveScheduleToCsv(paymentSchedule, nameOfSchedule if nameOfSchedule else None)

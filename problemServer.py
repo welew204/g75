@@ -338,6 +338,36 @@ class ProblemSet:
             avgs[dayString] = dailyMean
         return avgs
 
+    def getEarliestProblemDate(self):
+        dates = []
+        for v in self.completionCalendar.keys():
+            dates.extend(self.completionCalendar[v].keys())
+        return min(dates)
+
+    def avgCompletionsByWeek(self, startDateString=None):
+        startDate = None
+        if startDateString == None:
+            startDate = self.getEarliestProblemDate()
+        else:
+            startDate = self.dateConverter(startDateString)
+        now = dt.datetime.now()
+        prevMondayFromStartDate = startDate - dt.timedelta(days=startDate.weekday())
+        nxtMondayFromNow = now + dt.timedelta(days=-now.weekday(), weeks=1)
+        weeklyBuckets = {wk: 0 for wk in range(0, (nxtMondayFromNow-prevMondayFromStartDate).days//7)}
+        for p, dateDict in self.completionCalendar.items():
+            for d in dateDict.keys():
+                wkBucket = (d - prevMondayFromStartDate).days // 7
+                weeklyBuckets[wkBucket] += 1
+        return weeklyBuckets
+
+    def presentWeeklyBucketTotals(self):
+        startDate = ps.getEarliestProblemDate()
+        monBeforeStartDate = startDate - dt.timedelta(days=startDate.weekday())
+        pprint.pprint({ps.convertToDateString(
+            monBeforeStartDate + (dt.timedelta(days=k*7))):v 
+            for k, v in ps.avgCompletionsByWeek().items()
+            })
+        
 
 if __name__ == "__main__":
     ps = ProblemSet(currCoreProblems)
@@ -680,17 +710,92 @@ if __name__ == "__main__":
     ps.completeProblem(79, "10:00", "08-29-24")
     ps.completeProblem(207, "10:00", "08-29-24")
     # tomorrow WU w/ some LRU problems, then a new one
+    ps.completeProblem(322, "2:25", "08-30-24")
+    ps.completeProblem(133, "4:00", "08-30-24")
+    ps.completeProblem(238, "8:00", "08-30-24")
+    ps.completeProblem(98, "7:20", "08-30-24")
+    ps.completeProblem(208, "3:15", "08-30-24")
+    ps.completeProblem(155, "2:42", "09-03-24")
+    ps.completeProblem(98, "2:52", "09-03-24")
+    ps.completeProblem(3, "2:40", "09-03-24")
+    ps.completeProblem(17, "3:30", "09-03-24")
+    ps.completeProblem(133, "2:41", "09-03-24")
+    ps.completeProblem(15, "5:15", "09-03-24")
+    ps.completeProblem(973, "2:51", "09-03-24")
+    # new problem today! 200
+    ps.completeProblem(200, "34:00", "09-04-24")
+    ps.completeProblem(200, "11:00", "09-04-24")
+    ps.completeProblem(11, "1:39", "09-05-24")
+    ps.completeProblem(207, "5:10", "09-05-24")
+    ps.completeProblem(98, "9:50", "09-05-24")
+    ps.completeProblem(200, "11:50", "09-05-24")
+    ps.completeProblem(102, "5:15", "09-05-24")
+    ps.completeProblem(542, "14:00", "09-06-24")
+    ps.completeProblem(155, "3:00", "09-06-24")
+    ps.completeProblem(98, "2:15", "09-06-24")
+    ps.completeProblem(57, "2:50", "09-06-24")
+    ps.completeProblem(200, "7:15", "09-06-24")
+    # new prob tomorrow!!
+    ps.completeProblem(33, "75:00", "09-07-24", True)
+    ps.completeProblem(33, "3:54", "09-07-24")
+    ps.completeProblem(98, "1:45", "09-09-24")
+    ps.completeProblem(322, "4:45", "09-09-24")
+    ps.completeProblem(200, "7:10", "09-09-24")
+    ps.completeProblem(310, "5:15", "09-09-24")
+    ps.completeProblem(17, "2:00", "09-09-24")
+    ps.completeProblem(33, "4:45", "09-09-24")
+    ps.completeProblem(200, "4:49", "09-10-24")
+    ps.completeProblem(207, "17:00", "09-10-24", True)
+    ps.completeProblem(155, "1:45", "09-10-24")
+    ps.completeProblem(33, "2:39", "09-10-24")
+    ps.completeProblem(102, "2:46", "09-10-24")
+    ps.completeProblem(98, "1:49", "09-10-24")
+    ps.completeProblem(542, "6:40", "09-11-24")
+    ps.completeProblem(33, "2:22", "09-11-24")
+    ps.completeProblem(208, "4:20", "09-11-24")
+    ps.completeProblem(200, "6:38", "09-11-24")
+    ps.completeProblem(973, "2:03", "09-11-24")
+    ps.completeProblem(207, "3:06", "09-11-24")
+    # do some LRU
+    ps.completeProblem(621, "6:10", "09-12-24")
+    ps.completeProblem(150, "3:45", "09-12-24")
+    ps.completeProblem(79, "11:15", "09-12-24")
+    ps.completeProblem(105, "6:30", "09-12-24")
+    # a new problem!
+    ps.completeProblem(39, "31:00", "09-13-24")
+    ps.completeProblem(39, "10:00", "09-13-24", True)
+    ps.completeProblem(39, "7:09", "09-14-24")
+    # added avgWeeklyBucket calc to object
+    ps.completeProblem(238, "2:53", "09-14-24")
+    ps.completeProblem(15, "3:01", "09-14-24")
+    ps.completeProblem(3, "3:40", "09-16-24")
+    ps.completeProblem(973, "2:05", "09-16-24")
+    ps.completeProblem(207, "11:00", "09-16-24", True)
+    ps.completeProblem(200, "12:30", "09-16-24")
+    ps.completeProblem(150, "2:22", "09-16-24")
+    ps.completeProblem(105, "3:00", "09-16-24")
+    ps.completeProblem(208, "3:57", "09-16-24")
+    ps.completeProblem(39, "5:21", "09-16-24")
+    ps.completeProblem(133, "6:45", "09-24-24")
+    ps.completeProblem(39, "16:45", "09-24-24")
+    ps.completeProblem(3, "4:10", "09-24-24")
+    ps.completeProblem(105, "2:28", "09-24-24")
+    ps.completeProblem(200, "11:28", "09-24-24")
+    ps.completeProblem(207, "12:18", "09-24-24")
+    ps.completeProblem(17, "5:21", "09-24-24")
     
 
     # each day gen the problem list, then add results to the completionCalendar
-    #print(ps.genProblemList(numProblems=5, include=[155, 98], exclude=[1, 53]))
+    print(ps.leastRecentProblem())
+    print(ps.genProblemList(numProblems=6, include=[200, 207, 39], exclude=[1, 53]))
     #print(ps.hardestProblems(numProblems=5))
-    #print(ps.leastRecentProblem())
     #print(ps.bestTimes())
     #print(ps.avgTimes())
     #pprint.pprint(ps.dailyAverageOverSpan("05-01-24", "06-06-24"))
     #print(ps.avgForDay("05-25-24"))
     #pprint.pprint(ps.tracker)
     #print(sum([v for v in ps.tracker.values()]))
+    # the number of completions per week
+    # ps.presentWeeklyBucketTotals()
     #print({k: v for k, v in ps.tracker.items() if v < 10})
     
