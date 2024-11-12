@@ -783,6 +783,13 @@ if __name__ == "__main__":
     ps.completeProblem(200, "11:28", "09-24-24")
     ps.completeProblem(207, "12:18", "09-24-24")
     ps.completeProblem(17, "5:21", "09-24-24")
+    ps.completeProblem(11, "3:30", "09-25-24")
+    ps.completeProblem(15, "4:25", "09-25-24")
+    ps.completeProblem(207, "4:15", "09-25-24")
+    ps.completeProblem(208, "3:00", "09-25-24")
+    ps.completeProblem(200, "5:40", "09-25-24")
+    ps.completeProblem(39, "8:40", "09-25-24")
+    ps.completeProblem(57, "4:45", "09-25-24")
     
 
     # each day gen the problem list, then add results to the completionCalendar
